@@ -1,66 +1,55 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { BooksService } from './books.service';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Put,
+    UsePipes,
+} from '@nestjs/common';
+import {
+    ValidationPipe
+} from '@nestjs/common';
+import {
+    BooksService
+} from './books.service';
+import {
+    BookFormat
+} from './dto/books.dto';
 
 @Controller('books')
 export class BooksController {
-  constructor(private booksService: BooksService) {}
+    constructor(private booksService: BooksService) {}
 
-  @Get()
-  getBooks() {
-    return this.booksService.getAll();
-  }
+    @Get()
+    getBooks() {
+        return this.booksService.getAll();
+    }
 
-  @Get(':id')
-  getBookById(@Param('id') id: string) {
-    return this.booksService.findById(id);
-  }
+    @Get(':id')
+    getBookById(@Param('id') id: string) {
+        return this.booksService.findById(id);
+    }
 
-  @Post()
-  createBook(
-    @Body('name') name: string,
-    @Body('year') year: number,
-    @Body('author') author: string,
-    @Body('summary') summary: string,
-    @Body('publisher') publisher: string,
-    @Body('pageCount') pageCount: number,
-    @Body('readPage') readPage: number,
-  ) {
-    return this.booksService.create(
-      name,
-      year,
-      author,
-      summary,
-      publisher,
-      pageCount,
-      readPage,
-    );
-  }
+    @Post()
+    @UsePipes(ValidationPipe)
+    createBook(
+        @Body() payLoad: BookFormat
+    ) {
+        return this.booksService.create(payLoad);
+    }
 
-  @Put(':id')
-  updateBook(
-    @Param('id') id: string,
-    @Body('name') name: string,
-    @Body('year') year: number,
-    @Body('author') author: string,
-    @Body('summary') summary: string,
-    @Body('publisher') publisher: string,
-    @Body('pageCount') pageCount: number,
-    @Body('readPage') readPage: number,
-  ) {
-    return this.booksService.update(
-      id,
-      name,
-      year,
-      author,
-      summary,
-      publisher,
-      pageCount,
-      readPage,
-    );
-  }
+    @Put(':id')
+    @UsePipes(ValidationPipe)
+    updateBook(
+        @Param('id') id: string, @Body() payLoad: BookFormat
+    ) {
+        return this.booksService.update(id, payLoad);
+    }
 
-  @Delete(':id')
-  deleteBook(@Param('id') id: string) {
-    return this.booksService.delete(id);
-  }
+    @Delete(':id')
+    deleteBook(@Param('id') id: string) {
+        return this.booksService.delete(id);
+    }
 }
