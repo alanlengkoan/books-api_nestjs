@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { BooksModule } from './books/books.module';
-import { HomeController } from './home/home.controller';
 import { sequelizeConfig } from './configs/sequelize.config';
+import { HomeModule } from './home/home.module';
 
 @Module({
-  imports: [sequelizeConfig, BooksModule],
-  controllers: [HomeController],
+  imports: [sequelizeConfig, HomeModule, BooksModule],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}

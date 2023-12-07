@@ -10,7 +10,6 @@ import {
 import {
     Books
 } from './model/books.model';
-import { Sequelize } from 'sequelize';
 
 @Injectable()
 export class BooksService {
@@ -42,16 +41,12 @@ export class BooksService {
             readPage,
         };
 
-        const transaction = await Sequelize.transaction();
-
         try {
-            await Books.create(book, {
-                transaction
-            });
+            await Books.create(book);
 
-            await transaction.commit();
+            return 'Success';
         } catch (error) {
-            await transaction.rollback();
+            return error;
         }
     }
 
@@ -76,21 +71,16 @@ export class BooksService {
             readPage: readPage,
         };
 
-        const transaction = await Sequelize.transaction();
-
         try {
             const bookById = await Books.update(book, {
                 where: {
                     id: id,
                 },
-                transaction
             }, );
-
-            await transaction.commit();
 
             return bookById;
         } catch (error) {
-            await transaction.rollback();
+            return error;
         }
 
     }

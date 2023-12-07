@@ -1,9 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+    Controller,
+    Get
+} from '@nestjs/common';
+import { HomeService } from './home.service';
 
-@Controller('home')
+@Controller()
 export class HomeController {
-  @Get()
-  index() {
-    return 'Hello World!';
-  }
+    constructor(private homeService: HomeService) {}
+
+    @Get()
+    index() {
+        return this.homeService.getHello();
+    }
 }
